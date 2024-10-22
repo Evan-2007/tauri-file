@@ -2,7 +2,7 @@
 import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Upload } from "lucide-react"
-import { writeTextFile } from '@tauri-apps/api/fs';
+import { writeTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 
 
 
@@ -11,24 +11,22 @@ export default function FileUpload() {
 
   const [fileName, setFileName] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [file, setFile] = useState<File | null>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    setFileName(file ? file.name : null)
-    setFile(file)
-  }
+    setFileName(file ? file.name : null)  }
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
   }
 
   const submitFile = async() => {
+    if (!fileInputRef.current?.files?.[0]) {
+      return
+    }
+    const file = new Uint8Array(fileInputRef.current?.files?.[0].arrayBuffer()) 
     try {
-      await writeTextFile(
-        `${BaseDirectory.Downloads}/file.txt`,
-        file ? file.name : ''
-      )
+      await writeTextFile(fileName, file, { baseDir: BaseDirectory.AppConfig })
     } catch (error) {
       console.error(error)
       console.log('Error writing file')
