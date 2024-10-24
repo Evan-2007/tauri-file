@@ -83,7 +83,7 @@ function URLInput() {
     let downloaded = false
     while (!downloaded) {
       setMessage("Downloading...")
-      const state = await invoke('check_download_status')
+      const state = await invoke('check_download_status', {})
       console.log(state)
       if (state === true) {
         downloaded = true
