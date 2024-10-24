@@ -59,6 +59,58 @@ export default function FileUpload() {
         <Button onClick={() => submitFile()} variant="outline">
           Submit
         </Button>
+
+        <URLInput />
+    </div>
+  )
+}
+
+
+import {invoke } from '@tauri-apps/api/core'
+
+function URLInput() {
+  const [url, setUrl] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
+
+  const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(event.target.value)
+  }
+
+  const submitUrl = async() => {
+    setMessage("Loading...")
+    await invoke('download_file', { url: url, path: '../game.zip' })
+
+    let downloaded = false
+    while (!downloaded) {
+      setMessage("Downloading...")
+      const state = await invoke('check_download_status')
+      console.log(state)
+      if (state === true) {
+        downloaded = true
+      }
+
+    }
+    setMessage("Downloaded")
+  }
+  
+  //check download status
+
+  return (
+    <div className="flex flex-col items-center space-y-4 p-4 border rounded-lg bg-background">
+      <input
+        type="text"
+        value={url || ''}
+        onChange={handleUrlChange}
+        className="p-2 border rounded-lg bg-background"
+        placeholder="Enter URL"
+      />
+      <Button onClick={() => setUrl(null)} variant="outline"> 
+        Clear
+      </Button>
+      <Button onClick={() => submitUrl()} variant="outline">
+        Submit
+      </Button>
+      {message}
     </div>
   )
 }
