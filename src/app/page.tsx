@@ -77,23 +77,23 @@ function URLInput() {
   }
 
   const submitUrl = async() => {
-    setMessage("Loading...")
-    await invoke('download_file', { url: url, path: '../game.zip' })
-
-    let downloaded = false
-    while (!downloaded) {
-      setMessage("Downloading...")
-      const state = await invoke('check_download_status', {})
-      console.log(state)
-      if (state === true) {
-        downloaded = true
+      setMessage("Loading...")
+      await invoke('download_file', { url: url, path: '../game.zip' })
+  
+      const checkDownloadStatus = async () => {
+        const state = await invoke('check_download', {path: '../game.zip'})
+        console.log(state)
+        if (state === true) {
+          setMessage("Downloaded")
+        } else {
+          setMessage("Downloading...")
+          setTimeout(checkDownloadStatus, 1000) // Check again after 1 second
+        }
       }
-
-    }
-    setMessage("Downloaded")
+  
+      checkDownloadStatus()
   }
   
-  //check download status
 
   return (
     <div className="flex flex-col items-center space-y-4 p-4 border rounded-lg bg-background">

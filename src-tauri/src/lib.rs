@@ -18,7 +18,8 @@ struct DownloadState(Arc<Mutex<DownloadStatus>>);
 
 
 #[tauri::command]
-fn check_download_status(state: tauri::State<DownloadState>) -> bool {
+fn check_download(path: &str, state: tauri::State<DownloadState>) -> bool {
+    print!("Checking download status");
     let state = state.0.clone();
     let state = state.lock().unwrap();
     state.is_downloaded
@@ -52,36 +53,16 @@ fn download_file(url: &str, path: &str, state: tauri::State<DownloadState>) {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    #[cfg(dev)]
-    {
-      // `tauri dev` only code
-    }
-    if cfg!(dev) {
-      // `tauri dev` only code
-    } else {
-      // `tauri build` only code
-    }
 
-    let is_dev: bool = tauri::is_dev();
-
-    #[cfg(debug_assertions)]
-    {
-      // Debug only code
-    }
-    if cfg!(debug_assertions) {
-      // Debug only code
-    } else {
-      // Production only code
-    }
 
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
-            greet,
-            check_download_status
+            check_download,
+            download_file,
+            greet  // Include this if you want to keep the greet function
         ])
-        .invoke_handler(tauri::generate_handler!(download_file))
         .manage(DownloadState(Arc::new(Mutex::new(DownloadStatus {
             is_downloaded: false,
         }))))
