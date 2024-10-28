@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Upload } from "lucide-react"
 import { writeTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+import {Downloads} from '@/components/downloads'
 
 
 
@@ -36,31 +37,10 @@ export default function FileUpload() {
 
   return (
     <div className="flex flex-col items-center space-y-4 p-4 border rounded-lg bg-background">
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        className="sr-only"
-        id="file-upload"
-        aria-label="File upload"
-      />
-      <Button onClick={handleButtonClick} variant="outline">
-        <Upload className="mr-2 h-4 w-4" />
-        Choose File
-      </Button>
-      {fileName && (
-        <p className="text-sm text-muted-foreground">
-          Selected file: <span className="font-medium text-foreground">{fileName}</span>
-        </p>
-      )}
-        <Button onClick={() => setFileName(null)} variant="outline"> 
-          Clear
-        </Button>
-        <Button onClick={() => submitFile()} variant="outline">
-          Submit
-        </Button>
+
 
         <URLInput />
+        <Downloads />
     </div>
   )
 }
@@ -80,18 +60,6 @@ function URLInput() {
       setMessage("Loading...")
       await invoke('download_file', { url: url, path: '../game.zip' })
   
-      const checkDownloadStatus = async () => {
-        const state = await invoke('check_download', {path: '../game.zip'})
-        console.log(state)
-        if (state === true) {
-          setMessage("Downloaded")
-        } else {
-          setMessage("Downloading...")
-          setTimeout(checkDownloadStatus, 1000) // Check again after 1 second
-        }
-      }
-  
-      checkDownloadStatus()
   }
   
 
@@ -110,7 +78,6 @@ function URLInput() {
       <Button onClick={() => submitUrl()} variant="outline">
         Submit
       </Button>
-      {message}
     </div>
   )
 }

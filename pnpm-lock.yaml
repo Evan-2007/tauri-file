@@ -44,6 +44,9 @@ importers:
       tauri:
         specifier: ^0.15.0
         version: 0.15.0
+      zustand:
+        specifier: ^5.0.0
+        version: 5.0.0(@types/react@18.3.11)(react@19.0.0-rc-65a56d0e-20241020)
     devDependencies:
       '@tauri-apps/cli':
         specifier: ^2.0.4
@@ -3759,6 +3762,24 @@ packages:
     resolution: {integrity: sha512-+aybvXv/xafL6I67uSH5yLHrSy4/OaSOV9tniw4yZFIHpINXUcctVHE/WzHxOONrL2GHzJ8Fd4iDrNyaS6TVbg==}
     engines: {node: '>=10'}
     hasBin: true
+
+  zustand@5.0.0:
+    resolution: {integrity: sha512-LE+VcmbartOPM+auOjCCLQOsQ05zUTp8RkgwRzefUk+2jISdMMFnxvyTjA4YNWr5ZGXYbVsEMZosttuxUBkojQ==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
 snapshots:
 
@@ -7869,3 +7890,8 @@ snapshots:
       bin-build: 3.0.0
       bin-wrapper: 4.1.0
       logalot: 2.1.0
+
+  zustand@5.0.0(@types/react@18.3.11)(react@19.0.0-rc-65a56d0e-20241020):
+    optionalDependencies:
+      '@types/react': 18.3.11
+      react: 19.0.0-rc-65a56d0e-20241020
