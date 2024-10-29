@@ -30,10 +30,10 @@ fn get_all_downloads(state: tauri::State<DownloadState>) -> Vec<DownloadStatus> 
 }
 
 #[tauri::command]
-fn download_file(url: &str, path: &str, state: tauri::State<DownloadState>) -> String {  
+fn download_file(url: &str, _path: &str, state: tauri::State<DownloadState>) -> String {  
     println!("Starting download from: {}", url);
     let url = url.to_owned();
-    let path = path.to_owned();
+    let path = format!("{}{}", "../", url.split('/').last().unwrap().to_owned());
     let state = state.0.clone();
     let id: String = Uuid::new_v4().to_string();
     let id_clone = id.clone();

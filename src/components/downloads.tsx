@@ -26,7 +26,7 @@ export function Downloads() {
 
     useEffect(() => {
         setInterval(() => {
-            invoke('get_all_downloads').then((downloads) => {
+            invoke('get_all_downloads').then((downloads: unknown) => {
                 downloads.forEach((download: Download) => {
                     useDownloadStore.getState().setDownloads(downloads)
                 })
@@ -51,7 +51,7 @@ export function Downloads() {
   const getStatusColor = (status: Download['status']) => {
     switch (status) {
       case 'downloading':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-white text-blue-800'
       case 'completed':
         return 'bg-green-100 text-green-800'
       case 'paused':
@@ -77,7 +77,7 @@ export function Downloads() {
                   <p className="text-xs text-gray-500">ID: {download.id}</p>
                 </div>
               </div>
-              <Badge className={`${getStatusColor(download.is_downloaded ? 'completed' : 'downloading ')} capitalize`}>
+              <Badge className={`${getStatusColor(download.is_downloaded ? 'completed' : 'downloading ')} capitalize`} className={`bg-transparent`}>
                 {download.is_downloaded ? 'completed' : <Status status={download.status} />}
               </Badge>
             </li>
@@ -120,7 +120,7 @@ function Status({ status = '0MB/100MB' }: StatusIndicatorProps) {
           />
         </svg>
       </div>
-      <span className="mt-1 text-xs font-medium text-white" aria-live="polite">
+      <span className="mt-1 text-xs font-medium text-black" aria-live="polite">
         {status}
       </span> 
     </div>

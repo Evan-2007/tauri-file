@@ -10,31 +10,6 @@ import {Downloads} from '@/components/downloads'
 export default function FileUpload() {
 
 
-  const [fileName, setFileName] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    setFileName(file ? file.name : null)  }
-
-  const handleButtonClick = () => {
-    fileInputRef.current?.click()
-  }
-
-  const submitFile = async() => {
-    if (!fileInputRef.current?.files?.[0]) {
-      return
-    }
-    const file = new Uint8Array(fileInputRef.current?.files?.[0].arrayBuffer()) 
-    try {
-      await writeTextFile(fileName, file, { baseDir: BaseDirectory.AppConfig })
-    } catch (error) {
-      console.error(error)
-      console.log('Error writing file')
-      setFileName("Error")
-    }
-  }
-
   return (
     <div className="flex flex-col items-center space-y-4 p-4 border rounded-lg bg-background">
 
@@ -78,6 +53,7 @@ function URLInput() {
       <Button onClick={() => submitUrl()} variant="outline">
         Submit
       </Button>
+      {/* <input type="file" webkitdirectory='true' mozdirectory /> */}
     </div>
   )
 }
