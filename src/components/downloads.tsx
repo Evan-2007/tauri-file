@@ -10,10 +10,11 @@ import {invoke } from '@tauri-apps/api/core'
 import {useEffect } from 'react'
 
 type Download = {
-  id: string
-  title: string
-  status: string,
-  is_downloaded: boolean,
+  id: number;
+  url: string;
+  is_downloaded: string;
+  status: string;
+  path: string;
 }
 
 type DownloadStatusCardProps = {
@@ -24,11 +25,15 @@ type DownloadStatusCardProps = {
 
 export function Downloads() {
 
+  const saveDownload = useDownloadStore((state) => state.addDownload)
+
     useEffect(() => {
         setInterval(() => {
             invoke('get_all_downloads').then((downloads: unknown) => {
-                downloads.forEach((download: Download) => {
-                    useDownloadStore.getState().setDownloads(downloads)
+                const downloadList = downloads as Download[];
+                downloadList.forEach((download: Download) => {
+                    saveDownload(download)
+
                 })
             })
         }, 1000);
@@ -77,7 +82,7 @@ export function Downloads() {
                   <p className="text-xs text-gray-500">ID: {download.id}</p>
                 </div>
               </div>
-              <Badge className={`${getStatusColor(download.is_downloaded ? 'completed' : 'downloading ')} capitalize`} className={`bg-transparent`}>
+              <Badge className={`${getStatusColor(download.is_downloaded ? 'completed' : 'downloading')} bg-transparent capitalize`}>
                 {download.is_downloaded ? 'completed' : <Status status={download.status} />}
               </Badge>
             </li>

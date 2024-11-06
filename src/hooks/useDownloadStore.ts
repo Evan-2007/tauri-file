@@ -3,6 +3,7 @@ import { create } from 'zustand';
 interface downloadStore {
     downloads: download [];
     addDownload: (download: download) => void;
+    setDownloads: (downloads: download[]) => void;
 
 }
 
